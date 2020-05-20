@@ -2,8 +2,8 @@
 
 ## Requirements
 
-- [minishift]
-- [helm]()
+- [minishift](https://github.com/minishift/minishift/releases)
+- [helm](https://github.com/helm/helm/releases)
 
 ## Tasks
 
