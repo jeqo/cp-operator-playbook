@@ -1,6 +1,7 @@
 CP_VERSION := 5.5.0
 VM_DRIVER  := hyperkit
 NAMESPACE  := confluent-operator
+PROVIDER   := local
 
 all:
 
@@ -22,17 +23,20 @@ minishift-policy: minishift-login
 	oc project ${NAMESPACE}
 	oc adm policy add-scc-to-user privileged -z default -n ${NAMESPACE}
 
+kubectl-namespace:
+	kubectl create namespace ${NAMESPACE}
+
 kubectl-crds:
 	kubectl apply -f cp-operator/resources/crds
 
 kubectl-rbac:
 	kubectl apply -f cp-operator/resources/rbac
 
-local-install: kubectl-crds kubectl-rbac 
-	./cp-operator/scripts/operator-util.sh -n ${NAMESPACE} -r co -f providers/local.yml
+install: kubectl-crds kubectl-rbac 
+	./cp-operator/scripts/operator-util.sh -n ${NAMESPACE} -r co -f providers/${PROVIDER}.yml
 
-local-uninstall:
-	./cp-operator/scripts/operator-util.sh --delete -n ${NAMESPACE} -r co -f providers/local.yml
+uninstall:
+	./cp-operator/scripts/operator-util.sh --delete -n ${NAMESPACE} -r co -f providers/${PROVIDER}.yml
 
 c3-port-forward:
 	kubectl port-forward svc/controlcenter 9021:9021 -n ${NAMESPACE}
