@@ -4,8 +4,43 @@
 
 - [minishift](https://github.com/minishift/minishift/releases)
 - [helm](https://github.com/helm/helm/releases)
+- kubectl
 
-## Tasks
+## GCP
+
+### Additional requirements
+
+- [terraform](https://terraform.io)
+- gcloud
+
+### 1. Create a GKE cluster
+
+```bash
+cd gcp
+terraform init
+terraform plan
+terraform apply
+```
+
+### 2. Configure kubectl
+
+```bash
+gcloud container clusters get-credentials jeqo-operator --zone europe-west2
+```
+
+### 3. Create Namespace
+
+```bash
+make kubectl-namespace
+```
+
+### 4. Install
+
+```bash
+make PROVIDER=gcp install
+```
+
+## Minishift
 
 ### 1. Download Operator
 
@@ -42,7 +77,7 @@ make minishift-policy
 ### 2.4. Deploy operator and create cluster
 
 ```bash
-make local-install
+make install
 ```
 
 Details from [Cluster definition](./providers/minishift.yml):
@@ -61,5 +96,5 @@ and go to <http://localhost:9021> and log in with `admin/Developer1`
 ### 2.6. Uninstall cluster
 
 ```bash
-make local-unistall
+make unistall
 ```
